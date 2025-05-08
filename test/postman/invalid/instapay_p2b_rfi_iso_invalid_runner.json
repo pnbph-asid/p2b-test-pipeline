@@ -1,0 +1,723 @@
+{
+	"info": {
+		"_postman_id": "1f5f4553-cddb-4c09-9d98-9d35b5d5cb24",
+		"name": "InstaPay P2B-RFI Automated Test -  Invalid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13964227",
+		"_collection_link": "https://ews-dev.postman.co/workspace/55ccd023-c7ba-40b8-8dca-5b172197e40d/collection/13964227-1f5f4553-cddb-4c09-9d98-9d35b5d5cb24?action=share&source=collection_link&creator=13964227"
+	},
+	"item": [
+		{
+			"name": "200 - Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Authentication Successful Status Code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							" var jsonData = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(\"bearerToken\", jsonData.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"e2e-client-sit\",\n\t\"password\": \"P@ssw0rd\"\n}",
+					"options": {
+						"raw": {
+							"headerFamily": "json",
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Response Body of status code 200",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"biller-admin\",\n\t\"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"auth"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODc3NTgxOTAsInVzZXJfbmFtZSI6ImJpbGxlci1hZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwianRpIjoiNGIxZmI3YmEtMzE1Ny00YjFiLWFiYWYtYmE2MmM1MmY5NDUxIiwiY2xpZW50X2lkIjoiY2xpZW50Iiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.ycSGUQ9nc9slAE443-xL1mO4vezM3DOmoxKtHrqZEyk\",\n\t\"expires_in\": \"2023-06-10 08:08:12,556\"\n}"
+				},
+				{
+					"name": "Response Body of status code 401",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"biller-admin\",\n\t\"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"auth"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"respCode\": \"04\",\r\n    \"respDesc\": \"Invalid Username\",\r\n    \"message\": \"Unauthorized\",\r\n}"
+				}
+			]
+		},
+		{
+			"name": "400 - Invalid SN - Validation Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var requestBody = JSON.parse(pm.request.body);",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"",
+							"pm.test(\" Invalid Subscriber Number Status Code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\" Invalid Subscriber Number Status is REJECTED\", function () {",
+							"    pm.expect(jsonData.txnStatus).to.have.eql(\"REJECTED\");});",
+							"",
+							"",
+							"pm.test(\" Invalid Subscriber Number Status is BE15\", function () {",
+							"    pm.expect(jsonData.reason).to.have.eql(\"BE15\");});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const currentDate = new Date();\r",
+							"\r",
+							"const month = String(currentDate.getMonth() + 1).padStart(2, '0'); \r",
+							"const day = String(currentDate.getDate()).padStart(2, '0');\r",
+							"\r",
+							"const year = String(currentDate.getFullYear()).slice(-2);\r",
+							"\r",
+							"const txnDate = `${month}${day}`;\r",
+							"\r",
+							"const hours = String(currentDate.getHours()).padStart(2, '0');\r",
+							"const minutes = String(currentDate.getMinutes()).padStart(2, '0');\r",
+							"const seconds = String(currentDate.getSeconds()).padStart(2, '0');\r",
+							"\r",
+							"const txnTime = `${hours}${minutes}${seconds}`;\r",
+							"\r",
+							"pm.environment.set('txnDate', txnDate);\r",
+							"pm.environment.set('txnTime', txnTime);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "API-Version",
+						"value": "2.0.0",
+						"description": "Version of the API Endpoint"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"instructionId\": \"2025{{txnDate}}BNNNPH22XXXB0000{{$timestamp}}\",\n\t\"ofiBic\": \"BNNNPH22XXX\",\n\t\"payerAccountName\": \"{{payerAccountName}}\",\n\t\"payerAccountNo\": \"11000179512199001\",\n\t\"rfiBic\": \"PNBMPHMMTOD\",\n\t\"billerId\": \"{{billerId}}\",\n\t\"txnAmount\": \"{{txnAmount}}\",\n\t\"txnDateTime\": \"2024-01-01T00:00:00\",\n\t\"txnStatus\": \"\",\n\t\"subscriberNo\": \"{{subscriberNo}}\",\n\t\"additionalSubscriberNo\": \"{{additionalSubscriberNo}}\",\n\t\"purpose\": \"{{testCase}}\"\n}",
+					"options": {
+						"raw": {
+							"headerFamily": "json",
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/billspayment/validate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"billspayment",
+						"validate"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Response Body of status code 200",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"48841~~9001PNBMTOD~~0\",\n\t\"respCode\": \"0\",\n\t\"respDesc\": \"Success\",\n\t\"traceNo\": \"PBS000004\"\n}"
+				},
+				{
+					"name": "Response Body of status code 400",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"48841~~9001PNBMTOD~~0\",\n\t\"respCode\": \"80\",\n\t\"respDesc\": \"Invalid Biller ID\",\n\t\"traceNo\": \"PBS000004\"\n}"
+				},
+				{
+					"name": "Response Body of status code 401",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"respCode\": \"04\",\n\t\"respDesc\": \"Authorization Required\",\n\t\"message\": \"Full authentication is required to access this resource\"\n}"
+				},
+				{
+					"name": "Response Body of status code 403",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Forbidden",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"description\": \"Request payload has no header \"\n}"
+				},
+				{
+					"name": "Response Body of status code 404",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"timestamp\": \"2023-06-30T06:59:18.121+00:00\",\n\t\"status\": 404,\n\t\"error\": \"Not Found\",\n\t\"path\": \"/api/p2brfi/instapa\"\n}"
+				},
+				{
+					"name": "Response Body of status code 408",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Request Timeout",
+					"code": 408,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"respCode\": \"68\",\n\t\"respDesc\": \"Request Timeout \",\n\t\"traceNo\": \"PBS000002\"\n}"
+				},
+				{
+					"name": "Response Body of status code 500",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "API-Version",
+								"value": "0.1.0-SNAPSHOT",
+								"description": "Version of the API Endpoint"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer <token>",
+								"description": "Added as a part of security scheme: bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bnkCode\": \"BOPIPHPHXXX\",\n\t\"crdNo\": \"5400769360000090\",\n\t\"acctName\": \"Leni Robredo\",\n\t\"acctNo\": \"0837083671420\",\n\t\"acctType\": \"10\",\n\t\"acctIdent\": \"March 29/ Davao City\",\n\t\"tfrName\": \"9001~PNB CREDIT CARD\",\n\t\"pin\": \"111111\",\n\t\"cyCode\": \"608\",\n\t\"tfrBnkCode\": \"PNBMTOD\",\n\t\"tfrAcctNo\": \"9001PNBMTOD\",\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"4889070800000241~~9001PNBMTOD~~0\",\n\t\"acqInfo\": \"\",\n\t\"custNo\": \"AA00000123456789\",\n\t\"purpose\": \"Test API\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/p2brfi/instapay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"p2brfi",
+								"instapay"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n\t\"txnAmt\": \"1000\",\n\t\"txnDate\": \"0113\",\n\t\"txnTime\": \"08000\",\n\t\"mallId\": \"899900000030016\",\n\t\"merchantId\": \"899900000030016\",\n\t\"invNo\": \"{{rnd_invNum}}\",\n\t\"param1\": \"\",\n\t\"param2\": \"\",\n\t\"param3\": \"99968405~ph.ppmi.p2b~~~011/123456\",\n\t\"param4\": \"48841~~9001PNBMTOD~~0\",\n\t\"respCode\": \"96\",\n\t\"respDesc\": \"Internal System Error\",\n\t\"traceNo\": \"PBS000004\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bearerToken",
+			"value": ""
+		},
+		{
+			"key": "baseIdGenerated",
+			"value": "false",
+			"type": "string"
+		},
+		{
+			"key": "validateIdGenerated",
+			"value": "false",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "creditIdGenerated",
+			"value": "false",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}

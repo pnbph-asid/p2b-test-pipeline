@@ -1,0 +1,33 @@
+{
+	"id": "6e82cbea-91b9-4342-bd15-5e9fcfad9edb",
+	"name": "InstaPay-ISO-P2B-Local",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:8443",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "rnd_invNum",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "txnDate",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "txnTime",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-04-24T03:27:00.648Z",
+	"_postman_exported_using": "Postman/11.41.1-250415-1220"
+}
