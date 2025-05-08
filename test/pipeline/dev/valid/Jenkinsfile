@@ -83,12 +83,6 @@ stages {
         }
     }
 
-    post {
-        always {
-            echo 'Test Pipeline execution completed.'
-        }
-    }
-
     }
 
 }
