@@ -3,10 +3,10 @@ pipeline {
 agent any
 
 environment {
-    COLLECTION = 'test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner'
-    ENVIRONMENT = 'test/environment/dev.json' // Optional
-    DATA_DIR = 'test/data/invalid' // Directory containing CSV files
-    REPORT_DIR = 'test/results'
+    COLLECTION = './test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner'
+    ENVIRONMENT = './test/environment/dev.json' // Optional
+    DATA_DIR = './test/data/invalid' // Directory containing CSV files
+    REPORT_DIR = './test/results'
 }
 
 tools{
