@@ -3,10 +3,10 @@ pipeline {
 agent any
 
 environment {
-    COLLECTION = './test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner'
-    ENVIRONMENT = './test/environment/dev.json' // Optional
-    DATA_DIR = './test/data/invalid' // Directory containing CSV files
-    REPORT_DIR = './test/results'
+    COLLECTION = 'test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner.json'
+    ENVIRONMENT = 'test/environment/dev.json'
+    DATA_DIR = 'test/data/invalid' // Directory containing CSV files
+    REPORT_DIR = 'test/results'
 }
 
 tools{
@@ -20,10 +20,16 @@ stages {
         }
     }
 
+    stage('Install Dependencies') {
+        steps {
+            sh 'npm install -g newman newman-reporter-htmlextra'
+        }
+    }
+
     stage('Checkout Test Pipeline') {
         steps {
             // Get some code from a GitHub repository
-            git branch: 'feature/es',
+            git branch: 'main',
             credentialsId: 'sabilaed-github',
             url: 'https://github.com/pnbph-asid/p2b-test-pipeline.git'
         }
@@ -51,10 +57,11 @@ stages {
                     sh """
                         mkdir -p ${REPORT_DIR}
                         newman run "${COLLECTION}" \
+                            --insecure \
                             --environment "${ENVIRONMENT}" \
                             --iteration-data "${dataFilePath}" \
-                            --reporters cli,html \
-                            --reporter-html-export "${reportFilePath}"
+                            --reporters cli,htmlextra \
+                            --reporter-htmlextra-export "${reportFilePath}"
                     """
                 }
             }

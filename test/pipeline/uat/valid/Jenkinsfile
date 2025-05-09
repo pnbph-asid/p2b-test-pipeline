@@ -4,7 +4,7 @@ agent any
 
 environment {
     COLLECTION = 'test/postman/valid/instapay_p2b_rfi_iso_valid_runner.json'
-    ENVIRONMENT = 'test/environment/dev.json'
+    ENVIRONMENT = 'test/environment/uat.json'
     DATA_DIR = 'test/data/valid' // Directory containing CSV files
     REPORT_DIR = 'test/results'
 }

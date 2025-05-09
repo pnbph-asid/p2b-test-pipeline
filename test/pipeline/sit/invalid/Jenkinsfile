@@ -3,9 +3,9 @@ pipeline {
 agent any
 
 environment {
-    COLLECTION = 'test/postman/valid/instapay_p2b_rfi_iso_valid_runner.json'
-    ENVIRONMENT = 'test/environment/dev.json'
-    DATA_DIR = 'test/data/valid' // Directory containing CSV files
+    COLLECTION = 'test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner.json'
+    ENVIRONMENT = 'test/environment/sit.json'
+    DATA_DIR = 'test/data/invalid' // Directory containing CSV files
     REPORT_DIR = 'test/results'
 }
 
@@ -35,7 +35,7 @@ stages {
         }
     }
 
-    stage('Run Valid Tests') {
+    stage('Run Invalid Tests') {
         steps {
             script {
                 // Find all CSV files in the DATA_DIR
