@@ -1,0 +1,95 @@
+pipeline {
+
+agent any
+
+environment {
+    COLLECTION = 'test/postman/invalid/instapay_p2b_rfi_iso_invalid_runner.json'
+    ENVIRONMENT = 'test/environment/sit.json'
+    DATA_DIR = 'test/data/invalid' // Directory containing CSV files
+    REPORT_DIR = 'test/results'
+}
+
+tools{
+    nodejs 'newman'
+}
+stages {
+
+    stage('Clean Worspace') {
+        steps {
+            cleanWs()
+        }
+    }
+
+    stage('Install Dependencies') {
+        steps {
+            sh 'npm install -g newman newman-reporter-htmlextra'
+        }
+    }
+
+    stage('Checkout Test Pipeline') {
+        steps {
+            // Get some code from a GitHub repository
+            git branch: 'main',
+            credentialsId: 'sabilaed-github',
+            url: 'https://github.com/pnbph-asid/p2b-test-pipeline.git'
+        }
+    }
+
+    stage('Run Invalid Tests') {
+        steps {
+            script {
+                // Find all CSV files in the DATA_DIR
+                def dataFiles = findFiles(glob: "${DATA_DIR}/*.csv")
+                
+                if (dataFiles.length == 0) {
+                    error "No CSV files found in ${DATA_DIR} directory."
+                }
+
+                // Iterate over each CSV file and run Newman
+                dataFiles.each { file ->
+                    def dataFilePath = file.path
+                    def dataFileName = file.name
+                    def reportFileName = dataFileName.replace('.csv', '-report.html')
+                    def reportFilePath = "${REPORT_DIR}/${reportFileName}"
+
+                    echo "Running Newman with data file: ${dataFilePath}"
+
+                    sh """
+                        mkdir -p ${REPORT_DIR}
+                        newman run "${COLLECTION}" \
+                            --insecure \
+                            --environment "${ENVIRONMENT}" \
+                            --iteration-data "${dataFilePath}" \
+                            --reporters cli,htmlextra \
+                            --reporter-htmlextra-export "${reportFilePath}"
+                    """
+                }
+            }
+        }
+    }
+
+    stage('Publish Reports') {
+        steps {
+            script {
+                // Find all generated HTML reports
+                def reportFiles = findFiles(glob: "${REPORT_DIR}/*-report.html")
+                
+                if (reportFiles.length == 0) {
+                    error "No report files found in ${REPORT_DIR} directory."
+                }
+
+                // Publish each report
+                reportFiles.each { report ->
+                    publishHTML(target: [
+                        reportDir: REPORT_DIR,
+                        reportFiles: report.name,
+                        reportName: "Report - ${report.name}"
+                    ])
+                }
+            }
+        }
+    }
+
+    }
+
+}
